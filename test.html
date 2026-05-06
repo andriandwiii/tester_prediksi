@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RINTISKU — Kendalikan Bisnis Tanpa Batas</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/primeicons/6.0.1/primeicons.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: #fff; color: #1e293b; overflow-x: hidden; }
+
+/* ——— GRID ——— */
+.container { max-width: 1200px; margin: 0 auto; width: 100%; }
+.grid { display: grid; gap: 16px; }
+.g2 { grid-template-columns: repeat(2, 1fr); }
+.g3 { grid-template-columns: repeat(3, 1fr); }
+.g4 { grid-template-columns: repeat(4, 1fr); }
+.g-hero { grid-template-columns: 1fr 1fr; align-items: center; gap: 64px; }
+.g-footer { grid-template-columns: 2fr 1fr 1fr 1.8fr; gap: 48px; }
+@media(max-width:900px){.g2,.g3,.g4,.g-hero,.g-footer{grid-template-columns:1fr;}}
+@media(max-width:680px){.g3{grid-template-columns:1fr;}}
+
+/* ——— ANIMATIONS ——— */
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);} }
+@keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);} }
+@keyframes float2 { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+@keyframes shimmer { 0%{background-position:-200% center;}100%{background-position:200% center;} }
+@keyframes pulseRing { 0%{transform:scale(1);opacity:.4;}100%{transform:scale(1.6);opacity:0;} }
+
+.anim-fadeup { animation: fadeUp .7s ease forwards; }
+.anim-fadeup-d1 { animation: fadeUp .7s .15s ease both; }
+.anim-fadeup-d2 { animation: fadeUp .7s .3s ease both; }
+.anim-fadeup-d3 { animation: fadeUp .7s .2s ease both; }
+.float-a { animation: float 5s ease-in-out infinite; }
+.float-b { animation: float2 7s 1s ease-in-out infinite; }
+
+/* ——— COMPONENTS ——— */
+.shimmer-btn {
+  background: linear-gradient(90deg,#4f46e5 0%,#7c3aed 40%,#4f46e5 100%);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+  color: #fff; border: none; cursor: pointer; font-family: inherit; font-weight: 700;
+}
+.shimmer-btn:hover { filter: brightness(1.09); animation-play-state: paused; }
+
+.tag { display: inline-block; background: #f0f4ff; color: #4f46e5; border-radius: 8px; padding: 4px 14px; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 16px; }
+
+.section-title { font-family: 'DM Serif Display', serif; font-size: clamp(2rem,4vw,2.8rem); color: #0f172a; letter-spacing: -.03em; margin-bottom: 14px; }
+
+.grid-bg {
+  background-image: linear-gradient(rgba(79,70,229,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(79,70,229,.06) 1px,transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ——— NAVBAR ——— */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  padding: 14px 32px; display: flex; align-items: center; justify-content: space-between;
+  transition: all .3s;
+}
+nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,.08); border-bottom-color: #e2e8f0; }
+.nav-logo { display: flex; align-items: center; gap: 12px; }
+.nav-logo-icon { width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(79,70,229,.35); }
+.nav-brand { font-family:'DM Serif Display',serif;font-size:1.35rem;color:#1e293b;letter-spacing:-.02em; }
+.nav-brand span { color:#4f46e5; }
+.nav-links { display:flex;align-items:center;gap:4px; }
+.nav-link { padding:8px 16px;border-radius:8px;font-weight:500;color:#64748b;text-decoration:none;font-size:.9rem;transition:all .2s; }
+.nav-link:hover { color:#4f46e5;background:#f0f0ff; }
+.nav-actions { display:flex;align-items:center;gap:8px; }
+.btn-outline { padding:8px 20px;border-radius:8px;border:1.5px solid #e2e8f0;background:transparent;font-weight:600;font-size:.9rem;cursor:pointer;color:#374151;font-family:inherit;transition:all .2s; }
+.btn-outline:hover { border-color:#4f46e5;color:#4f46e5; }
+.btn-shimmer { padding:8px 20px;border-radius:8px;font-size:.9rem;font-family:inherit; }
+
+/* ——— HERO ——— */
+.hero { padding:90px 32px 80px;min-height:92vh;display:flex;align-items:center;position:relative;overflow:hidden; }
+.hero-badge { display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#eef2ff,#f5f3ff);border:1px solid rgba(79,70,229,.2);border-radius:99px;padding:6px 16px;margin-bottom:24px; }
+.hero-badge-dot { width:8px;height:8px;border-radius:50%;background:#4f46e5; }
+.hero-badge-text { font-size:.8rem;font-weight:600;color:#4f46e5; }
+.hero-title { font-family:'DM Serif Display',serif;font-size:clamp(2.8rem,5.5vw,4.2rem);line-height:1.08;letter-spacing:-.03em;color:#0f172a;margin-bottom:20px; }
+.hero-title .grad { background:linear-gradient(135deg,#4f46e5,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+.hero-sub { font-size:1.1rem;color:#475569;line-height:1.7;margin-bottom:36px;max-width:460px; }
+.hero-btns { display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px; }
+.btn-primary { padding:14px 28px;border-radius:12px;font-size:1rem;font-family:inherit;display:flex;align-items:center;gap:8px; }
+.btn-secondary { padding:14px 28px;border-radius:12px;border:2px solid #e2e8f0;background:#fff;font-weight:600;font-size:1rem;cursor:pointer;color:#374151;display:flex;align-items:center;gap:8px;font-family:inherit;transition:all .2s; }
+.btn-secondary:hover { border-color:#4f46e5;color:#4f46e5; }
+.trust-badges { display:flex;align-items:center;gap:20px;flex-wrap:wrap; }
+.trust-item { display:flex;align-items:center;gap:6px;color:#64748b;font-size:.85rem; }
+.trust-item .pi { color:#10b981; }
+
+/* ——— HERO VISUAL ——— */
+.hero-visual { position:relative; }
+.hero-img-wrap { background:linear-gradient(135deg,#f0f4ff,#faf5ff);border-radius:24px;padding:16px;box-shadow:0 30px 80px rgba(79,70,229,.18);border:1px solid rgba(79,70,229,.1);position:relative; }
+.hero-img-wrap img { width:100%;border-radius:16px;display:block; }
+.stat-card-a { position:absolute;bottom:-20px;left:-20px;background:#fff;border-radius:14px;padding:14px 20px;box-shadow:0 8px 30px rgba(0,0,0,.12);border:1px solid #e2e8f0;min-width:170px; }
+.stat-card-b { position:absolute;top:-16px;right:-16px;background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:14px;padding:14px 20px;box-shadow:0 8px 30px rgba(79,70,229,.35);min-width:150px; }
+.stat-label { font-size:.68rem;font-weight:600;letter-spacing:.04em; }
+.stat-val { font-size:1.3rem;font-weight:800;margin:3px 0; }
+.stat-sub { font-size:.73rem;font-weight:600; }
+
+/* ——— FEATURES ——— */
+.features { padding:80px 32px;background:#fff; }
+.feat-card { padding:28px 24px;border-radius:16px;background:#fff;border:1px solid #e2e8f0;transition:all .3s;cursor:default; }
+.feat-card:hover { border-color:#4f46e5;box-shadow:0 8px 30px rgba(79,70,229,.12);transform:translateY(-4px); }
+.feat-icon { width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#eef2ff,#f5f3ff);display:flex;align-items:center;justify-content:center;margin-bottom:20px; }
+.feat-icon .pi { color:#4f46e5;font-size:1.3rem; }
+.feat-title { font-weight:700;font-size:1.05rem;margin-bottom:10px;color:#0f172a; }
+.feat-desc { color:#64748b;font-size:.9rem;line-height:1.7; }
+
+/* ——— MODULES ——— */
+.modules { padding:80px 32px;background:#f8faff; }
+.mod-card { padding:24px;border-radius:16px;background:#fff;border:1px solid #e2e8f0;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:all .3s;display:flex;align-items:flex-start;gap:16px; }
+.mod-card:hover { box-shadow:0 12px 40px rgba(0,0,0,.10);border-color:#c7d2fe; }
+.mod-card:hover .mod-icon { transform:scale(1.1) rotate(-3deg); }
+.mod-icon { width:48px;height:48px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:transform .3s; }
+.mod-name { font-weight:700;font-size:.95rem;color:#0f172a;margin-bottom:6px; }
+.mod-desc { font-size:.85rem;color:#64748b;line-height:1.6; }
+
+/* ——— TESTIMONIALS ——— */
+.testimonials { padding:80px 32px;background:#fff; }
+.testi-card { padding:28px 24px;border-radius:16px;background:#fff;border:1px solid #e2e8f0;box-shadow:0 4px 16px rgba(0,0,0,.06);transition:all .3s; }
+.testi-card:hover { transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.12); }
+.stars { margin-bottom:16px; }
+.stars .pi { color:#fbbf24;font-size:.85rem;margin-right:2px; }
+.testi-text { color:#374151;font-size:.95rem;line-height:1.75;margin-bottom:20px;font-style:italic; }
+.testi-author { display:flex;align-items:center;gap:12px; }
+.testi-avatar { width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.85rem;flex-shrink:0; }
+.testi-name { font-weight:700;font-size:.9rem;color:#0f172a; }
+.testi-role { font-size:.8rem;color:#94a3b8; }
+
+/* ——— PRICING ——— */
+.pricing { padding:80px 32px;background:linear-gradient(180deg,#f8faff 0%,#fff 100%); }
+.billing-toggle { display:flex;justify-content:center;margin-bottom:48px; }
+.toggle-wrap { display:flex;background:#f1f5f9;border-radius:14px;padding:4px;gap:2px;border:1px solid #e2e8f0; }
+.toggle-btn { border:none;cursor:pointer;border-radius:10px;padding:8px 22px;font-weight:600;font-size:.875rem;font-family:inherit;transition:all .25s;position:relative;white-space:nowrap;background:transparent;color:#64748b; }
+.toggle-btn.active { background:#4f46e5;color:#fff;box-shadow:0 2px 8px rgba(79,70,229,.3); }
+.toggle-badge { position:absolute;top:-10px;right:-6px;background:#10b981;color:#fff;font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:99px;white-space:nowrap; }
+
+.plan-cards { display:grid;grid-template-columns:repeat(3,1fr);gap:16px; }
+@media(max-width:900px){.plan-cards{grid-template-columns:1fr 1fr;}}
+@media(max-width:600px){.plan-cards{grid-template-columns:1fr;}}
+
+.plan-card { border-radius:20px;padding:28px 24px;position:relative;display:flex;flex-direction:column;border:1px solid #e2e8f0;background:#fff;transition:transform .25s,box-shadow .25s; }
+.plan-card:hover { transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,.1); }
+.plan-card.highlight { border:2px solid #4f46e5;background:linear-gradient(145deg,#4f46e5 0%,#6d28d9 100%);color:#fff;box-shadow:0 20px 60px rgba(79,70,229,.28); }
+.plan-badge-top { position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#78350f;font-size:.72rem;font-weight:700;padding:4px 18px;border-radius:99px;white-space:nowrap;box-shadow:0 4px 12px rgba(245,158,11,.4); }
+.plan-tag { display:inline-block;border-radius:8px;padding:3px 12px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px; }
+.plan-desc { font-size:.85rem;opacity:.75;line-height:1.55;margin-bottom:18px; }
+.plan-price-wrap { border-bottom:1px solid rgba(0,0,0,.08);padding-bottom:20px;margin-bottom:20px; }
+.plan-price { font-size:1.8rem;font-weight:800;line-height:1; }
+.plan-period { font-size:.85rem;opacity:.7; }
+.plan-save { font-size:.75rem;margin-top:4px;color:#10b981;font-weight:600; }
+.plan-features { list-style:none;flex:1;margin-bottom:24px; }
+.plan-features li { display:flex;align-items:flex-start;gap:9px;margin-bottom:11px;font-size:.875rem; }
+.plan-features li .pi { font-size:.9rem;margin-top:1px;flex-shrink:0; }
+.plan-cta { width:100%;padding:13px;border-radius:12px;font-weight:700;font-size:.95rem;cursor:pointer;font-family:inherit;transition:all .2s; }
+
+/* ——— FAQ ——— */
+.faq { padding:80px 32px;background:#fff; }
+.faq-inner { max-width:760px;margin:0 auto; }
+.faq-list { display:flex;flex-direction:column;gap:12px; }
+.faq-item { border-radius:14px;border:1.5px solid #e2e8f0;overflow:hidden;transition:border-color .25s; }
+.faq-item.open { border-color:#4f46e5; }
+.faq-btn { width:100%;padding:18px 20px;background:none;border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:.95rem;color:#0f172a;text-align:left;gap:12px;font-family:inherit; }
+.faq-btn .pi { color:#4f46e5;flex-shrink:0;font-size:.9rem; }
+.faq-body { overflow:hidden;transition:max-height .3s ease; }
+.faq-body p { padding:0 20px 18px;color:#64748b;font-size:.9rem;line-height:1.75; }
+
+/* ——— CTA BANNER ——— */
+.cta-section { padding:40px 32px 80px; }
+.cta-box { max-width:1000px;margin:0 auto;background:linear-gradient(135deg,#1e1b4b 0%,#4f46e5 50%,#7c3aed 100%);border-radius:28px;padding:72px 64px;text-align:center;position:relative;overflow:hidden;box-shadow:0 32px 80px rgba(79,70,229,.3); }
+@media(max-width:680px){.cta-box{padding:48px 28px;}}
+.cta-blob { position:absolute;border-radius:50%;background:rgba(255,255,255,.05);pointer-events:none; }
+.cta-title { font-family:'DM Serif Display',serif;font-size:clamp(2rem,5vw,3.2rem);color:#fff;margin-bottom:16px;letter-spacing:-.03em;line-height:1.15;position:relative;z-index:1; }
+.cta-sub { color:rgba(199,210,254,.9);font-size:1.1rem;max-width:520px;margin:0 auto 36px;position:relative;z-index:1; }
+.cta-btns { display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1; }
+.cta-btn-white { padding:14px 32px;border-radius:12px;border:none;background:#fff;color:#4f46e5;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;box-shadow:0 8px 24px rgba(0,0,0,.15);transition:transform .2s; }
+.cta-btn-white:hover { transform:translateY(-2px); }
+.cta-btn-ghost { padding:14px 28px;border-radius:12px;border:2px solid rgba(255,255,255,.4);background:rgba(255,255,255,.1);color:#fff;font-weight:600;font-size:1rem;cursor:pointer;font-family:inherit;backdrop-filter:blur(8px);transition:background .2s; }
+.cta-btn-ghost:hover { background:rgba(255,255,255,.2); }
+
+/* ——— BONUS BANNER ——— */
+.bonus-banner { margin-top:32px;padding:20px 24px;border-radius:16px;background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1px solid #fcd34d;display:flex;align-items:flex-start;gap:16px; }
+.bonus-emoji { font-size:1.5rem;flex-shrink:0;margin-top:2px; }
+.bonus-title { font-weight:700;color:#92400e;font-size:.95rem;margin-bottom:4px; }
+.bonus-desc { color:#b45309;font-size:.875rem;line-height:1.6; }
+
+/* ——— FOOTER ——— */
+footer { background:#0f172a;color:#94a3b8;padding:64px 32px 32px; }
+.footer-grid { display:grid;grid-template-columns:2fr 1fr 1fr 1.8fr;gap:48px;margin-bottom:48px; }
+@media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;gap:32px;}}
+@media(max-width:560px){.footer-grid{grid-template-columns:1fr;}}
+.footer-logo { display:flex;align-items:center;gap:12px;margin-bottom:16px; }
+.footer-logo-icon { width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center; }
+.footer-brand { font-family:'DM Serif Display',serif;font-size:1.35rem;color:#fff;letter-spacing:-.02em; }
+.footer-brand span { color:#818cf8; }
+.footer-desc { line-height:1.8;font-size:.9rem;margin-bottom:24px;max-width:280px; }
+.footer-desc strong { color:#e2e8f0; }
+.footer-socials { display:flex;gap:10px; }
+.social-btn { width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(255,255,255,.1);transition:all .2s; }
+.social-btn:hover { background:#4f46e5;border-color:#4f46e5; }
+.social-btn .pi { font-size:.85rem;color:#94a3b8; }
+.footer-col h5 { color:#e2e8f0;font-weight:700;margin-bottom:20px;font-size:.9rem; }
+.footer-link { margin-bottom:12px;cursor:pointer;font-size:.875rem;transition:color .2s;display:block; }
+.footer-link:hover { color:#818cf8; }
+.newsletter-label { font-size:.875rem;line-height:1.6;margin-bottom:16px; }
+.newsletter-row { display:flex;gap:8px; }
+.newsletter-input { flex:1;padding:10px 16px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#e2e8f0;font-size:.875rem;outline:none;font-family:inherit; }
+.newsletter-input::placeholder { color:#64748b; }
+.newsletter-btn { padding:10px 16px;border-radius:10px;border:none;cursor:pointer;flex-shrink:0; }
+.footer-bottom { border-top:1px solid rgba(255,255,255,.08);padding-top:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:.8rem; }
+.footer-bottom strong { color:#e2e8f0;font-weight:600; }
+.footer-legal { display:flex;gap:20px; }
+.footer-legal span { cursor:pointer;transition:color .2s; }
+.footer-legal span:hover { color:#818cf8; }
+
+/* ——— BLOB DECO ——— */
+.blob { position:absolute;border-radius:50%;pointer-events:none; }
+</style>
+</head>
+<body>
+
+<!-- ========== NAVBAR ========== -->
+<nav id="navbar">
+  <div class="nav-logo">
+    <div class="nav-logo-icon">
+      <i class="pi pi-prime" style="color:#fff;font-size:1rem;"></i>
+    </div>
+    <span class="nav-brand">RINTISKU<span>.</span></span>
+  </div>
+  <div class="nav-links">
+    <a href="#fitur" class="nav-link">Fitur</a>
+    <a href="#modul" class="nav-link">Modul</a>
+    <a href="#harga" class="nav-link">Harga</a>
+    <a href="#testimoni" class="nav-link">Testimoni</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-outline">Masuk</button>
+    <button class="shimmer-btn btn-shimmer" style="border-radius:8px;">Coba Gratis ✨</button>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero grid-bg" id="fitur">
+  <div class="blob" style="top:-120px;right:-120px;width:500px;height:500px;background:radial-gradient(circle,rgba(79,70,229,.12) 0%,transparent 70%);"></div>
+  <div class="blob" style="bottom:-80px;left:-80px;width:350px;height:350px;background:radial-gradient(circle,rgba(124,58,237,.10) 0%,transparent 70%);"></div>
+  <div class="container">
+    <div class="g-hero" style="display:grid;">
+      <!-- Left -->
+      <div style="position:relative;z-index:1;">
+        <div class="hero-badge anim-fadeup">
+          <span class="hero-badge-dot"></span>
+          <span class="hero-badge-text">Baru: AI-Powered Analytics Dashboard</span>
+        </div>
+        <h1 class="hero-title anim-fadeup">
+          Kendalikan Bisnis<br>
+          <span class="grad">Tanpa Batas.</span>
+        </h1>
+        <p class="hero-sub anim-fadeup-d1">
+          Platform ERP pertama yang dirancang khusus untuk UMKM Indonesia. Satu platform, semua kebutuhan operasional Anda.
+        </p>
+        <div class="hero-btns anim-fadeup-d2">
+          <button class="shimmer-btn btn-primary">
+            <i class="pi pi-play-circle"></i> Coba Demo Gratis
+          </button>
+          <button class="btn-secondary">
+            <i class="pi pi-phone"></i> Konsultasi Gratis
+          </button>
+        </div>
+        <div class="trust-badges anim-fadeup-d2">
+          <div class="trust-item"><i class="pi pi-check-circle"></i> Tanpa kartu kredit</div>
+          <div class="trust-item"><i class="pi pi-check-circle"></i> Setup dalam 1 hari</div>
+          <div class="trust-item"><i class="pi pi-check-circle"></i> Batalkan kapan saja</div>
+        </div>
+      </div>
+      <!-- Right Visual -->
+      <div class="hero-visual anim-fadeup-d3">
+        <div class="hero-img-wrap">
+          <img src="https://www.primefaces.org/static/social/primereact-preview.jpg" alt="Dashboard Preview" onerror="this.src='https://placehold.co/700x420/eef2ff/4f46e5?text=Dashboard+Preview'" />
+          <div class="stat-card-a float-a">
+            <div class="stat-label" style="color:#94a3b8;">PENDAPATAN BULAN INI</div>
+            <div class="stat-val" style="color:#0f172a;">Rp 248 Jt</div>
+            <div class="stat-sub" style="color:#10b981;">▲ 18% vs bulan lalu</div>
+          </div>
+          <div class="stat-card-b float-b">
+            <div class="stat-label" style="color:rgba(255,255,255,.7);">STOK KRITIS</div>
+            <div class="stat-val" style="color:#fff;">3 Item</div>
+            <div class="stat-sub" style="color:#fde68a;">⚠ Perlu restock</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FEATURES ========== -->
+<section class="features">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:56px;">
+      <div class="tag">Mengapa RINTISKU?</div>
+      <h2 class="section-title">Dibangun untuk Pertumbuhan</h2>
+      <p style="color:#64748b;font-size:1.05rem;max-width:500px;margin:0 auto;">Setiap fitur dirancang dengan satu tujuan: membuat bisnis Anda lebih efisien.</p>
+    </div>
+    <div class="grid g4">
+      <div class="feat-card">
+        <div class="feat-icon"><i class="pi pi-sync"></i></div>
+        <div class="feat-title">Terintegrasi Penuh</div>
+        <div class="feat-desc">Satu sumber data tunggal untuk seluruh departemen. Tidak ada lagi data yang tersebar.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><i class="pi pi-shield"></i></div>
+        <div class="feat-title">Keamanan Enterprise</div>
+        <div class="feat-desc">Enkripsi end-to-end dengan audit log lengkap. Data Anda aman di tangan kami.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><i class="pi pi-bolt"></i></div>
+        <div class="feat-title">Analisis Realtime</div>
+        <div class="feat-desc">Dashboard interaktif diperbarui setiap detik. Ambil keputusan berbasis data, bukan asumsi.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><i class="pi pi-chart-line"></i></div>
+        <div class="feat-title">Skalabilitas Tinggi</div>
+        <div class="feat-desc">Sistem yang tumbuh bersama bisnis Anda. Dari 5 hingga 5.000 karyawan, kami siap.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== MODULES ========== -->
+<section class="modules" id="modul">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:56px;">
+      <div class="tag">Modul Lengkap</div>
+      <h2 class="section-title">Satu Platform, Semua Kebutuhan</h2>
+      <p style="color:#64748b;font-size:1.05rem;max-width:520px;margin:0 auto;">Modul kami bekerja selaras satu sama lain, menghilangkan silo data di seluruh organisasi Anda.</p>
+    </div>
+    <div class="grid g3">
+      <div class="mod-card">
+        <div class="mod-icon" style="background:#eff6ff;"><i class="pi pi-wallet" style="color:#2563eb;font-size:1.25rem;"></i></div>
+        <div><div class="mod-name">Finance & Accounting</div><div class="mod-desc">Pembukuan otomatis, laporan keuangan real-time, dan rekonsiliasi bank.</div></div>
+      </div>
+      <div class="mod-card">
+        <div class="mod-icon" style="background:#f5f3ff;"><i class="pi pi-users" style="color:#7c3aed;font-size:1.25rem;"></i></div>
+        <div><div class="mod-name">Human Resource</div><div class="mod-desc">Manajemen karyawan, absensi digital, dan penggajian otomatis setiap bulan.</div></div>
+      </div>
+      <div class="mod-card">
+        <div class="mod-icon" style="background:#fff7ed;"><i class="pi pi-box" style="color:#ea580c;font-size:1.25rem;"></i></div>
+        <div><div class="mod-name">Supply Chain</div><div class="mod-desc">Pantau stok, kelola gudang, dan optimalkan rantai distribusi Anda.</div></div>
+      </div>
+      <div class="mod-card">
+        <div class="mod-icon" style="background:#ecfeff;"><i class="pi pi-shopping-cart" style="color:#0891b2;font-size:1.25rem;"></i></div>
+        <div><div class="mod-name">Procurement</div><div class="mod-desc">Purchase order, approval workflow, dan negosiasi vendor dalam satu tempat.</div></div>
+      </div>
+      <div class="mod-card">
+        <div class="mod-icon" style="background:#eef2ff;"><i class="pi pi-chart-bar" style="color:#4338ca;font-size:1.25rem;"></i></div>
+        <div><div class="mod-name">Business Intelligence</div><div class="mod-desc">Laporan mendalam dan visualisasi data untuk eksekutif dan manajer.</div></div>
+      </div>
+      <div class="mod-card">
+        <div class="mod-icon" style="background:#f0fdfa;"><i class="pi pi-sliders-h" style="color:#0d9488;font-size:1.25rem;"></i></div>
+        <div><div class="mod-name">System Admin</div><div class="mod-desc">Kelola hak akses, role pengguna, dan konfigurasi sistem dengan mudah.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TESTIMONIALS ========== -->
+<section class="testimonials" id="testimoni">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:56px;">
+      <div class="tag">Testimonial</div>
+      <h2 class="section-title">Apa Kata Mereka?</h2>
+    </div>
+    <div class="grid g3">
+      <div class="testi-card">
+        <div class="stars"><i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i></div>
+        <p class="testi-text">"Sejak pakai RINTISKU, laporan keuangan kami yang dulu makan 3 hari kini selesai dalam 2 jam. Transformasi yang luar biasa."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#4f46e5,#4f46e599);">BS</div>
+          <div><div class="testi-name">Budi Santoso</div><div class="testi-role">CEO · PT Maju Bersama</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars"><i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i></div>
+        <p class="testi-text">"Integrasi antara HR dan Finance-nya seamless banget. Penggajian 80 karyawan kini cukup 1 klik. Tim saya sangat terbantu."</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#7c3aed,#7c3aed99);">SD</div>
+          <div><div class="testi-name">Sari Dewi</div><div class="testi-role">Finance Manager · CV Berkah Jaya</div></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars"><i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i><i class="pi pi-star-fill"></i></div>
+        <p class="testi-text">"Saya pikir ERP hanya untuk perusahaan besar. Ternyata paket Essential-nya cocok banget buat UMKM saya. Harganya juga terjangkau!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,#0891b2,#0891b299);">RP</div>
+          <div><div class="testi-name">Rizky Pratama</div><div class="testi-role">Owner · Toko Sembako Makmur</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PRICING ========== -->
+<section class="pricing" id="harga">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px;">
+      <div class="tag">Harga Transparan</div>
+      <h2 class="section-title">Pay as You <span style="color:#4f46e5;">Grow</span></h2>
+      <p style="color:#64748b;font-size:1.05rem;max-width:480px;margin:0 auto;">Harga yang tumbuh bersama bisnis Anda. Tidak ada biaya tersembunyi.</p>
+    </div>
+
+    <div class="billing-toggle">
+      <div class="toggle-wrap">
+        <button class="toggle-btn active" onclick="setBilling('monthly',this)">Bulanan</button>
+        <button class="toggle-btn" onclick="setBilling('biannual',this)" style="position:relative;">
+          6 Bulan
+          <span class="toggle-badge">Hemat 4%</span>
+        </button>
+        <button class="toggle-btn" onclick="setBilling('annual',this)" style="position:relative;">
+          1 Tahun
+          <span class="toggle-badge">Hemat 8%</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="plan-cards">
+      <!-- Essential -->
+      <div class="plan-card">
+        <div>
+          <div class="plan-tag" style="background:#eef2ff;color:#4f46e5;">Essential</div>
+          <p class="plan-desc">Untuk UMKM yang baru mulai go-digital. Fondasi pencatatan yang kuat.</p>
+        </div>
+        <div class="plan-price-wrap">
+          <div>
+            <span class="plan-price" data-monthly="Rp 75.000" data-biannual="Rp 430.000" data-annual="Rp 828.000">Rp 75.000</span>
+            <span class="plan-period" data-monthly="/bulan" data-biannual="/6 bulan" data-annual="/tahun">/bulan</span>
+          </div>
+        </div>
+        <ul class="plan-features">
+          <li><i class="pi pi-check-circle" style="color:#4f46e5;"></i><span>HR & Penggajian Otomatis</span></li>
+          <li><i class="pi pi-check-circle" style="color:#4f46e5;"></i><span>Inventory (Inbound & Outbound)</span></li>
+          <li><i class="pi pi-check-circle" style="color:#4f46e5;"></i><span>Laporan Laba Rugi</span></li>
+          <li><i class="pi pi-check-circle" style="color:#4f46e5;"></i><span>Multiple User Account</span></li>
+          <li><i class="pi pi-check-circle" style="color:#4f46e5;"></i><span>1x Pelatihan Gratis</span></li>
+          <li><i class="pi pi-check-circle" style="color:#4f46e5;"></i><span>Buku Panduan Digital</span></li>
+        </ul>
+        <button class="plan-cta" style="background:#4f46e5;border:2px solid #4f46e5;color:#fff;">Mulai Sekarang <i class="pi pi-arrow-right" style="font-size:.8rem;margin-left:6px;"></i></button>
+      </div>
+
+      <!-- Intermediate -->
+      <div class="plan-card">
+        <div>
+          <div class="plan-tag" style="background:#f5f3ff;color:#7c3aed;">Intermediate</div>
+          <p class="plan-desc">Untuk UMKM yang siap scale-up dengan kontrol produksi lebih ketat.</p>
+        </div>
+        <div class="plan-price-wrap">
+          <div>
+            <span class="plan-price" data-monthly="Rp 89.000" data-biannual="Rp 511.000" data-annual="Rp 982.000">Rp 89.000</span>
+            <span class="plan-period" data-monthly="/bulan" data-biannual="/6 bulan" data-annual="/tahun">/bulan</span>
+          </div>
+        </div>
+        <ul class="plan-features">
+          <li><i class="pi pi-check-circle" style="color:#7c3aed;"></i><span>Semua fitur Essential</span></li>
+          <li><i class="pi pi-check-circle" style="color:#7c3aed;"></i><span>Produksi (Batch Number)</span></li>
+          <li><i class="pi pi-check-circle" style="color:#7c3aed;"></i><span>Product Movement Tracking</span></li>
+          <li><i class="pi pi-check-circle" style="color:#7c3aed;"></i><span>Multiple User Account</span></li>
+          <li><i class="pi pi-check-circle" style="color:#7c3aed;"></i><span>1x Pelatihan Gratis</span></li>
+          <li><i class="pi pi-check-circle" style="color:#7c3aed;"></i><span>Buku Panduan Digital</span></li>
+        </ul>
+        <button class="plan-cta" style="background:#7c3aed;border:2px solid #7c3aed;color:#fff;">Mulai Sekarang <i class="pi pi-arrow-right" style="font-size:.8rem;margin-left:6px;"></i></button>
+      </div>
+
+      <!-- Intermediate Executive — HIGHLIGHT -->
+      <div class="plan-card highlight">
+        <div class="plan-badge-top">⭐ Terpopuler</div>
+        <div>
+          <div class="plan-tag" style="background:rgba(255,255,255,.2);color:#fff;">Intermediate Executive</div>
+          <p class="plan-desc">Paket terfavorit. Fitur lengkap dengan laporan analitik penjualan mendalam.</p>
+        </div>
+        <div class="plan-price-wrap" style="border-color:rgba(255,255,255,.2);">
+          <div>
+            <span class="plan-price" data-monthly="Rp 129.000" data-biannual="Rp 741.000" data-annual="Rp 1.424.000">Rp 129.000</span>
+            <span class="plan-period" data-monthly="/bulan" data-biannual="/6 bulan" data-annual="/tahun">/bulan</span>
+          </div>
+        </div>
+        <ul class="plan-features">
+          <li><i class="pi pi-check-circle" style="color:#a5f3fc;"></i><span>Semua fitur Intermediate</span></li>
+          <li><i class="pi pi-check-circle" style="color:#a5f3fc;"></i><span>Laporan Penjualan Produk</span></li>
+          <li><i class="pi pi-check-circle" style="color:#a5f3fc;"></i><span>Laporan Profitabilitas Pelanggan</span></li>
+          <li><i class="pi pi-check-circle" style="color:#a5f3fc;"></i><span>Multiple User Account</span></li>
+          <li><i class="pi pi-check-circle" style="color:#a5f3fc;"></i><span>1x Pelatihan Gratis</span></li>
+          <li><i class="pi pi-check-circle" style="color:#a5f3fc;"></i><span>Buku Panduan Digital</span></li>
+        </ul>
+        <button class="plan-cta" style="background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.4);color:#fff;backdrop-filter:blur(4px);">Pilih Paket Ini <i class="pi pi-arrow-right" style="font-size:.8rem;margin-left:6px;"></i></button>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="plan-card">
+        <div>
+          <div class="plan-tag" style="background:#fff7ed;color:#ea580c;">Enterprise</div>
+          <p class="plan-desc">Operasional dan penjualan dalam satu ekosistem. Siap dominasi pasar.</p>
+        </div>
+        <div class="plan-price-wrap">
+          <div>
+            <span class="plan-price" data-monthly="Rp 159.000" data-biannual="Rp 913.000" data-annual="Rp 1.751.000">Rp 159.000</span>
+            <span class="plan-period" data-monthly="/bulan" data-biannual="/6 bulan" data-annual="/tahun">/bulan</span>
+          </div>
+        </div>
+        <ul class="plan-features">
+          <li><i class="pi pi-check-circle" style="color:#ea580c;"></i><span>Semua fitur Int. Executive</span></li>
+          <li><i class="pi pi-check-circle" style="color:#ea580c;"></i><span>Modul Marketing & Sales</span></li>
+          <li><i class="pi pi-check-circle" style="color:#ea580c;"></i><span>Multiple User Account</span></li>
+          <li><i class="pi pi-check-circle" style="color:#ea580c;"></i><span>2x Pelatihan Gratis</span></li>
+          <li><i class="pi pi-check-circle" style="color:#ea580c;"></i><span>Buku Panduan Digital</span></li>
+          <li><i class="pi pi-check-circle" style="color:#ea580c;"></i><span>Prioritas Support</span></li>
+        </ul>
+        <button class="plan-cta" style="background:#ea580c;border:2px solid #ea580c;color:#fff;">Mulai Sekarang <i class="pi pi-arrow-right" style="font-size:.8rem;margin-left:6px;"></i></button>
+      </div>
+
+      <!-- Enterprise Exclusive -->
+      <div class="plan-card">
+        <div>
+          <div class="plan-tag" style="background:#f1f5f9;color:#475569;">Enterprise Exclusive</div>
+          <p class="plan-desc">Solusi fully custom untuk bisnis besar dengan kebutuhan spesifik dan kompleks.</p>
+        </div>
+        <div class="plan-price-wrap">
+          <div style="font-size:1.6rem;font-weight:800;color:#0f172a;">Hubungi CS</div>
+        </div>
+        <ul class="plan-features">
+          <li><i class="pi pi-check-circle" style="color:#475569;"></i><span>Semua Fitur Fully Custom</span></li>
+          <li><i class="pi pi-check-circle" style="color:#475569;"></i><span>Dedicated Account Manager</span></li>
+          <li><i class="pi pi-check-circle" style="color:#475569;"></i><span>Integrasi API Kustom</span></li>
+          <li><i class="pi pi-check-circle" style="color:#475569;"></i><span>Pelatihan Intensif Tim</span></li>
+          <li><i class="pi pi-check-circle" style="color:#475569;"></i><span>SLA & Dukungan 24/7</span></li>
+          <li><i class="pi pi-check-circle" style="color:#475569;"></i><span>Keamanan Level Enterprise</span></li>
+        </ul>
+        <button class="plan-cta" style="background:#475569;border:2px solid #475569;color:#fff;">Hubungi Sales <i class="pi pi-arrow-right" style="font-size:.8rem;margin-left:6px;"></i></button>
+      </div>
+    </div>
+
+    <!-- Bonus banner -->
+    <div class="bonus-banner">
+      <div class="bonus-emoji">🎁</div>
+      <div>
+        <div class="bonus-title">Bonus Untuk Setiap Pembelian Paket</div>
+        <div class="bonus-desc">Setiap paket sudah termasuk <strong>1x pelatihan gratis</strong> dan <strong>buku panduan digital</strong> yang diberikan di awal pembelian.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FAQ ========== -->
+<section class="faq">
+  <div class="faq-inner">
+    <div style="text-align:center;margin-bottom:48px;">
+      <div class="tag">FAQ</div>
+      <h2 class="section-title">Pertanyaan Umum</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)">
+          <span>Apakah ada masa percobaan gratis?</span>
+          <i class="pi pi-plus"></i>
+        </button>
+        <div class="faq-body" style="max-height:0;">
+          <p>Ya! Kami menyediakan demo gratis yang bisa diakses tanpa kartu kredit. Anda juga bisa konsultasi langsung dengan tim kami untuk trial terbimbing selama 14 hari.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)">
+          <span>Apakah data saya aman jika saya berhenti berlangganan?</span>
+          <i class="pi pi-plus"></i>
+        </button>
+        <div class="faq-body" style="max-height:0;">
+          <p>Data Anda tetap menjadi milik Anda. Kami menyediakan ekspor data penuh dalam format Excel/CSV kapan saja Anda butuhkan, bahkan setelah langganan berakhir.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)">
+          <span>Bisakah saya upgrade atau downgrade paket kapan saja?</span>
+          <i class="pi pi-plus"></i>
+        </button>
+        <div class="faq-body" style="max-height:0;">
+          <p>Tentu! Anda bisa upgrade paket kapan saja dan perbedaan biaya akan dihitung secara prorata. Downgrade berlaku di awal siklus tagihan berikutnya.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)">
+          <span>Berapa lama proses implementasi dan onboarding?</span>
+          <i class="pi pi-plus"></i>
+        </button>
+        <div class="faq-body" style="max-height:0;">
+          <p>Rata-rata 3–7 hari kerja tergantung kompleksitas bisnis Anda. Sudah termasuk sesi pelatihan gratis, migrasi data dasar, dan pendampingan hingga tim Anda mandiri.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-btn" onclick="toggleFaq(this)">
+          <span>Apakah RINTISKU bisa diintegrasikan dengan aplikasi lain?</span>
+          <i class="pi pi-plus"></i>
+        </button>
+        <div class="faq-body" style="max-height:0;">
+          <p>Ya, kami mendukung integrasi dengan berbagai platform populer seperti marketplace (Tokopedia, Shopee), sistem kasir, dan dapat terhubung via API untuk kebutuhan kustom.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CTA ========== -->
+<section class="cta-section">
+  <div class="cta-box">
+    <div class="cta-blob" style="top:-80px;right:-80px;width:320px;height:320px;"></div>
+    <div class="cta-blob" style="bottom:-60px;left:-60px;width:240px;height:240px;"></div>
+    <h2 class="cta-title">Siap Bertransformasi Digital?</h2>
+    <p class="cta-sub">Bergabung dengan lebih dari 1.200 bisnis yang telah meningkatkan efisiensi operasional hingga 40% dengan RINTISKU.</p>
+    <div class="cta-btns">
+      <button class="cta-btn-white">Daftar Sekarang — Gratis ✨</button>
+      <button class="cta-btn-ghost"><i class="pi pi-whatsapp" style="margin-right:8px;"></i>Hubungi Sales</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <!-- Brand -->
+      <div>
+        <div class="footer-logo">
+          <div class="footer-logo-icon"><i class="pi pi-prime" style="color:#fff;font-size:1rem;"></i></div>
+          <span class="footer-brand">RINTISKU<span>.</span></span>
+        </div>
+        <p class="footer-desc">Solusi manajemen bisnis terpadu dari <strong>PT. Garapan Indonesia Sukses</strong> untuk efisiensi dan pertumbuhan di era digital.</p>
+        <div class="footer-socials">
+          <div class="social-btn"><i class="pi pi-twitter"></i></div>
+          <div class="social-btn"><i class="pi pi-linkedin"></i></div>
+          <div class="social-btn"><i class="pi pi-instagram"></i></div>
+          <div class="social-btn"><i class="pi pi-github"></i></div>
+        </div>
+      </div>
+      <!-- Produk -->
+      <div>
+        <h5>Produk</h5>
+        <span class="footer-link">Fitur</span>
+        <span class="footer-link">Modul</span>
+        <span class="footer-link">Harga</span>
+        <span class="footer-link">Update</span>
+      </div>
+      <!-- Perusahaan -->
+      <div>
+        <h5>Perusahaan</h5>
+        <span class="footer-link">Tentang Kami</span>
+        <span class="footer-link">Blog</span>
+        <span class="footer-link">Karir</span>
+        <span class="footer-link">Kontak</span>
+      </div>
+      <!-- Newsletter -->
+      <div>
+        <h5>Newsletter</h5>
+        <p class="newsletter-label">Dapatkan tips bisnis & update terbaru langsung di inbox Anda.</p>
+        <div class="newsletter-row">
+          <input class="newsletter-input" type="email" placeholder="Email Anda" />
+          <button class="shimmer-btn newsletter-btn"><i class="pi pi-send" style="color:#fff;"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 <strong>PT. Garapan Indonesia Sukses</strong>. All rights reserved.</span>
+      <div class="footer-legal">
+        <span>Kebijakan Privasi</span>
+        <span>Syarat & Ketentuan</span>
+        <span>Cookie</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Navbar scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Billing toggle
+let currentBilling = 'monthly';
+function setBilling(type, btn) {
+  currentBilling = type;
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.plan-price').forEach(el => {
+    el.textContent = el.dataset[type];
+  });
+  document.querySelectorAll('.plan-period').forEach(el => {
+    el.textContent = el.dataset[type];
+  });
+}
+
+// FAQ accordion
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const body = item.querySelector('.faq-body');
+  const icon = btn.querySelector('.pi');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => {
+    i.classList.remove('open');
+    i.querySelector('.faq-body').style.maxHeight = '0';
+    i.querySelector('.pi').className = 'pi pi-plus';
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    body.style.maxHeight = '200px';
+    icon.className = 'pi pi-minus';
+  }
+}
+</script>
+</body>
+</html>
